@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Web App - Modern Look & Dark Theme</title>
+    <style>
+        /* CSS Variables for theming */
+        :root {
+            /* Light Theme */
+            --bg-color: #f0f2f5;
+            --text-color: #333;
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --input-bg: #ffffff;
+            --input-text: #333;
+            --button-bg: #007bff;
+            --button-text: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --captcha-display-bg: #f8f9fa;
+        }
+
+        body.dark-theme {
+            /* Dark Theme */
+            --bg-color: #1a1a2e; /* Deep blue/purple */
+            --text-color: #e0e0e0;
+            --primary-color: #8d40ff; /* Brighter purple */
+            --secondary-color: #6a5acd; /* Muted purple */
+            --card-bg: #2e2e4a;
+            --border-color: #4a4a6e;
+            --input-bg: #3e3e5e;
+            --input-text: #e0e0e0;
+            --button-bg: #8d40ff;
+            --button-text: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --success-color: #4CAF50; /* Green */
+            --error-color: #FF5252; /* Red */
+            --captcha-display-bg: #3e3e5e;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        h1, h2 {
+            color: var(--text-color);
+            margin-bottom: 25px;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px var(--shadow-color);
+            padding: 30px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Theme Toggle Button */
+        #themeToggle {
+            background-color: var(--primary-color);
+            color: var(--button-text);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            outline: none;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        #themeToggle:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        #themeToggle:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        /* Captcha Solver Section */
+        #captcha-container {
+            margin-top: 20px;
+        }
+
+        #captcha-display {
+            background-color: var(--captcha-display-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 25px auto;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 2px;
+            text-align: center;
+            width: fit-content;
+            min-width: 150px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        #captcha-input {
+            width: calc(100% - 40px);
+            padding: 12px 18px;
+            margin: 0 0 20px 0;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1.1rem;
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        #captcha-input::placeholder {
+            color: var(--secondary-color);
+        }
+
+        #captcha-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        #check-captcha {
+            background-color: var(--primary-color);
+            color: var(--button-text);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            outline: none;
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        #check-captcha:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        #check-captcha:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        #captcha-result {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .success {
+            color: var(--success-color);
+        }
+
+        .error {
+            color: var(--error-color);
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Static Web App</h1>
+
+    <div class="container">
+        <button id="themeToggle">Switch to Dark Theme</button>
+    </div>
+
+    <div id="captcha-container" class="container">
+        <h2>Captcha Solver</h2>
+        <p>Prove you're not a robot!</p>
+        <div id="captcha-display">Loading...</div>
+        <input type="text" id="captcha-input" placeholder="Enter your answer here">
+        <button id="check-captcha">Verify Captcha</button>
+        <p id="captcha-result"></p>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        const setDarkMode = (isDark) => {
+            if (isDark) {
+                body.classList.add('dark-theme');
+                themeToggle.textContent = 'Switch to Light Theme';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggle.textContent = 'Switch to Dark Theme';
+                localStorage.setItem('theme', 'light');
+            }
+        };
+
+        // Load theme from localStorage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                setDarkMode(true);
+            } else {
+                setDarkMode(false); // Default to light if no preference or 'light'
+            }
+        });
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = body.classList.contains('dark-theme');
+            setDarkMode(!isDark);
+        });
+
+        // Captcha Solver Functionality
+        const captchaDisplay = document.getElementById('captcha-display');
+        const captchaInput = document.getElementById('captcha-input');
+        const checkCaptchaButton = document.getElementById('check-captcha');
+        const captchaResult = document.getElementById('captcha-result');
+
+        let correctAnswer;
+
+        function generateCaptcha() {
+            const num1 = Math.floor(Math.random() * 10) + 1; // Numbers 1-10
+            const num2 = Math.floor(Math.random() * 10) + 1; // Numbers 1-10
+            const operator = Math.random() < 0.5 ? '+' : '-'; // Simple + or -
+
+            let problem;
+            if (operator === '+') {
+                problem = `${num1} + ${num2}`;
+                correctAnswer = num1 + num2;
+            } else {
+                // Ensure the result is not negative for simplicity
+                if (num1 < num2) {
+                    problem = `${num2} - ${num1}`;
+                    correctAnswer = num2 - num1;
+                } else {
+                    problem = `${num1} - ${num2}`;
+                    correctAnswer = num1 - num2;
+                }
+            }
+            captchaDisplay.textContent = `${problem} = ?`;
+            captchaInput.value = '';
+            captchaResult.textContent = '';
+        }
+
+        checkCaptchaButton.addEventListener('click', () => {
+            const userAnswer = parseInt(captchaInput.value, 10);
+
+            if (isNaN(userAnswer)) {
+                captchaResult.textContent = 'Please enter a number.';
+                captchaResult.className = 'error';
+            } else if (userAnswer === correctAnswer) {
+                captchaResult.textContent = 'Captcha solved successfully! You are not a robot.';
+                captchaResult.className = 'success';
+                setTimeout(generateCaptcha, 2000); // Generate new captcha after a delay
+            } else {
+                captchaResult.textContent = 'Incorrect answer. Please try again.';
+                captchaResult.className = 'error';
+                setTimeout(generateCaptcha, 1500); // Generate new captcha immediately
+            }
+        });
+
+        // Generate initial captcha on page load
+        document.addEventListener('DOMContentLoaded', generateCaptcha);
+    </script>
+</body>
+</html>
